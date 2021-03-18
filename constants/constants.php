@@ -29,3 +29,6 @@ define('EXECUTION_ERROR',   601);
 
 //custom full record
 define('FULL_RECORD',   701);
+
+//success login
+define('SUCCESS_LOGIN', 900);

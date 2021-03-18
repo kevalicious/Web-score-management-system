@@ -24,6 +24,13 @@ class Api extends Rest
     {
       $email = $this->validateParameters('email', $this->param['email'], 'STRING');
       $password = $this->validateParameters('password', $this->param['password'], 'STRING');
+
+      $login = new Login;
+      $login->setEmail($email);
+      $login->setPassword($password);
+
+      //login
+      $login->Ulogin();
     
 
     }
