@@ -1,5 +1,7 @@
 <?php 
 require_once("rest.php");
+require_once("includes/login.php");
+require_once("includes/register.php");
 require_once("includes/participants.php");
 require_once("includes/category.php");
 require_once("includes/team.php");
@@ -15,6 +17,18 @@ class Api extends Rest
     {
         parent::__construct();
         //$this->database;
+    }
+
+    //login
+    public function userLogin()
+    {
+
+    }
+
+    //registration
+    public function userRegistration()
+    {
+
     }
 
     //define methods(apinames)
@@ -100,15 +114,26 @@ class Api extends Rest
    }
 
    //view activities
-   public function viewActivities()
+   public function viewallActivities()
    {
        //token id
-       $token = $
-
+       
        $activity = new Activities;
-       $activity->setToken($token);
+      
        $activity->Activities();
 
+
+   }
+
+   public function viewActivity()
+   {
+        $id = $this->validateParameters('id', $this->param['id'], 'INTEGER');
+
+        $activity = new Activities;
+        $activity->setId($id);
+
+        //call it
+        $activity->myActivity();
 
    }
 

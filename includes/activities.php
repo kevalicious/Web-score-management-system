@@ -4,6 +4,7 @@ class Activities
 {
   
     private $activity;
+    private $aid;
     private $category;
     private $gameplay;
     private $token;
@@ -92,7 +93,7 @@ class Activities
         $tbl = $this->getTablename();
 
         $sql = "SELECT * FROM $tbl";
-        $stmt = $this->database->query($sql);
+        $stmt = $this->database->prepare($sql);
         if(!$stmt->execute())
         {
             $this->throwError(EXECUTION_ERROR,  'Error executing command @line94.');
@@ -103,11 +104,54 @@ class Activities
         {
             $this->throwResponse(NO_DATA, 'There are no activities yet.');
         }
+        else{
 
         //show all
-        $results = $stmt->fetchAll();
-        header("content-type: application/json");
-        echo json_encode(["response"=>[$results]]);
+         $read = $stmt->fetchAll();
+         
+         header("content-type: application/json");
+        // echo json_encode(["response"=>$read]);
+
+        }
+       
+
+    }
+
+    public function myActivity()
+    {
+        //connect to db 
+        $db = new Server;
+        $this->database = $db->dbConnect();
+        
+        //access db
+        $id = $this->getAid();
+        $tbl = $this->getTablename();
+        $sql = "SELECT * FROM $tbl WHERE id = :id ";
+        $stmt = $this->database->prepare($sql);
+
+        $stmt->bindParam(":id", $id);
+
+        if(!$stmt->execute())
+        {
+            $this->throwError(EXECUTION_ERROR,  'Error executing command @line124.');
+        }
+
+        //fetch assoc data
+        $rowcount = $stmt->rowCount();
+        if($rowcount < 1)
+        {
+            $this->throwResponse(NO_DATA,   'No such activity in the database.');
+        }
+
+        else{
+            $act_data = $stmt->fetch(PDO::FETCH_ASSOC);
+            header('content-type: application/json');
+            echo json_encode(["response"=>$act_data]);
+        }
+
+
+
+
 
     }
 
@@ -129,6 +173,16 @@ class Activities
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    public function setId($aid)
+    {
+        $this->aid = $aid;
+    }
+
+    public function getAid()
+    {
+        return $this->aid;
     }
 
     public function setCategory($category)
