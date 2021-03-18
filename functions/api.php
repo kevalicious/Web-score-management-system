@@ -42,6 +42,14 @@ class Api extends Rest
       $email = $this->validateParameters('email', $this->param['email'], 'STRING');
       $password = $this->validateParameters('password', $this->param['password'], 'STRING');
 
+      $register = new Register;
+      $register->setFullnames($fullnames);
+      $register->setEmail($email);
+      $register->setPassword($password);
+      
+      $register->saveUser();
+
+
     }
 
     //define methods(apinames)

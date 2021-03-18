@@ -59,7 +59,7 @@ class Login
       }
 
       //throe success code
-      $this->throwSuccess('900');
+      $this->throwSuccess(900);
 
 
   }

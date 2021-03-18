@@ -32,3 +32,6 @@ define('FULL_RECORD',   701);
 
 //success login
 define('SUCCESS_LOGIN', 900);
+
+//success registration
+define('SUCCESS_REG', 901);
