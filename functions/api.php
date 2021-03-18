@@ -22,12 +22,18 @@ class Api extends Rest
     //login
     public function userLogin()
     {
+      $email = $this->validateParameters('email', $this->param['email'], 'STRING');
+      $password = $this->validateParameters('password', $this->param['password'], 'STRING');
+    
 
     }
 
     //registration
     public function userRegistration()
     {
+      $fullnames = $this->validateParameters('fullnames', $this->param['fullnames'], 'STRING');
+      $email = $this->validateParameters('email', $this->param['email'], 'STRING');
+      $password = $this->validateParameters('password', $this->param['password'], 'STRING');
 
     }
 
