@@ -8,6 +8,7 @@ class Challenge
     private $score;
     private $complete = 1;
     private $table = "rawscores";
+    private $overscoreTb = "overallscores";
 
     public function setActivity($activity){ $this->activity = $activity; }
     public function setTeam($team){ $this->team = $team; }
@@ -38,6 +39,11 @@ class Challenge
     public function getTablename()
     {
         return $this->table;
+    }
+
+    public function getOvrTb()
+    {
+        return $this->overscoreTb;
     }
 
     public function gamePlay()
@@ -113,6 +119,13 @@ class Challenge
         {
            $this->throwError(EXECUTION_ERROR,   'Error executing command @line106');
         }
+
+        //update overall scores tb
+        //update score where team = team. formula: score = newscore + oldscore
+       $ovrTb = $this->getOvrTb();
+       $upte = "UPDATE $ovrTb SET `score` = :score WHERE team = :team";
+       $stmt = $this->database->prepare($upte);
+       
 
         //success
         $this->throwResponse(RECORD_ADDED,  'Recorded');
