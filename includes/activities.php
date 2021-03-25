@@ -80,7 +80,7 @@ class Activities
     }
 
     //view activity
-    public function Activities()
+    public function fetchActivities()
     {
         //decode token 
         //if token is valid, proceed.

@@ -123,9 +123,25 @@ class Challenge
         //update overall scores tb
         //update score where team = team. formula: score = newscore + oldscore
        $ovrTb = $this->getOvrTb();
+       $current = "SELECT `score` FROM $ovrTb WHERE team = :cteam";
+       $stmt = $this->database->prepare($current);
+       $stmt->bindParam(":cteam",  $tm);
+       $stmt->execute();
+       $row = $stmt->fetch();
+       $ovscore = $row['score'] + $score;
+      
+       
        $upte = "UPDATE $ovrTb SET `score` = :score WHERE team = :team";
        $stmt = $this->database->prepare($upte);
-       
+       $stmt->bindParam(":score", $ovscore);
+       $stmt->bindParam(":team", $tm);
+
+       try {
+           $stmt->execute();
+       } catch (\Exception $e) {
+           $this->throwError(EXECUTION_ERROR,   $e->getMessage());
+       }
+
 
         //success
         $this->throwResponse(RECORD_ADDED,  'Recorded');
@@ -133,6 +149,8 @@ class Challenge
         
 
     }
+
+
 
     public function throwError($code, $msg)
     {
