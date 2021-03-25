@@ -5,6 +5,7 @@ class Team
     private $team;
     private $image;
     private $tablename = "teams";
+    private $overallScoresTb = "overallscores";
 
     public function setTeam($team){ $this->team = $team; }
     public function setImage($image){ $this->image = $image; }
@@ -25,6 +26,11 @@ class Team
         return $this->tablename;
     }
 
+    public function getOverallScoresTb()
+    {
+        return $this->overallScoresTb;
+    }
+
     public function saveTeam()
     {
 
@@ -39,11 +45,13 @@ class Team
         $stmt = $this->database->prepare($sql);
         $stmt->bindParam(":team", $team);
 
-        if(!$stmt->execute())
-        {
-            //throw error
-            $this->throwError(EXECUTION_ERROR,  'Error executing command @line38');
+        try {
+            $stmt->execute();
+        } catch (\Exception $e) {
+            
+             $this->throwError(EXECUTION_ERROR,  $e->getMessage());
         }
+        
 
         //save team
         $row = $stmt->rowCount();
@@ -73,14 +81,32 @@ class Team
         $stmt->bindParam(":team", $s_team);
         $stmt->bindParam(":imagefile", $s_image);
 
-        if(!$stmt->execute())
-        {
-            //throwError
-            $this->throwError(EXECUTION_ERROR,  'Error executing command @line59');
+        try {
+            $stmt->execute();
+        } catch (\Exception $e) {
+            $this->throwError(EXECUTION_ERROR,  $e->getMessage());
+        }
+
+         //add overallscore tb data
+        $overTb = $this->getOverallScoresTb();
+        $ovrteam = $this->getTeam();
+        $score = 0;
+
+        $inputdta = "INSERT INTO $overTb(`id`,`team`,`score`)VALUES(NULL, :team, :score)";
+        $stmt = $this->database->prepare($inputdta);
+        $stmt->bindParam(":team", $ovrteam);
+        $stmt->bindParam(":score", $score);
+
+        try {
+            $stmt->execute();
+        } catch (\Exception $e) {
+            $this->throwError(EXECUTION_ERROR,  $e->getMessage());
         }
 
         //success response
         $this->throwResponse(RECORD_ADDED,  $team . ' registered successfully.');
+
+       
 
 
     }
