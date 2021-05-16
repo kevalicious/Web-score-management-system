@@ -16,7 +16,7 @@ class Server
            $pdo = new PDO($dsn, $this->getUsername(), $this->getPassword());
            return $pdo;
 
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
           echo $e->getMessage(); 
         }
 
